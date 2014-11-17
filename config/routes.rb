@@ -1,12 +1,27 @@
 Rails.application.routes.draw do
-  get 'static_pages/home'
+  get 'password_resets/new'
 
-  get 'static_pages/help'
+  get 'password_resets/edit'
 
-  resources :microposts
+  get 'account_activations/edit'
 
-  root 'users#index'
+  root                  'static_pages#home'
+  get    'help'     =>  'static_pages#help'
+  get    'about'    =>  'static_pages#about'
+  get    'contact'  =>  'static_pages#contact'
+  get    'signup'   =>  'users#new'
+  get    'login'    =>  'sessions#new'
+  post   'login'    =>  'sessions#create'
+  delete 'logout'   =>  'sessions#destroy'
   resources :users
+  resources :account_activations, only: [:edit]
+  resources :password_resets,     only: [:new, :create, :edit, :update]
+  resources :microposts
+end
+
+  # we should view a user with id 1 by issuing a GET request to the URL /users/1. 
+  # Here the show action is implicit in the type of request—when Rails’ REST 
+  # features are activated, GET requests are automatically handled by the show action.
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -62,4 +77,4 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
-end
+
