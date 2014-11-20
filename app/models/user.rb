@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
 	validates 	  :email, presence: true, length: {maximum: 255 },
 						format: 	{ with: VALID_EMAIL_REGEX },
 						uniqueness: { case_sensitive: false }
-	has_many :microposts
+	has_many :microposts, dependent: :destroy
 	has_secure_password
 	validates  :password, length: { minimum: 6}, allow_blank: true
 
@@ -69,6 +69,11 @@ class User < ActiveRecord::Base
 		update_attribute(:remember_digest, nil)
 	end
 
+	# Defines a proto feed.
+	def feed
+		Micropost.where("user_id = ?", id)
+	end
+	
 	private
 
 	def downcase_email
